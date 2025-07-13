@@ -17,6 +17,10 @@ public class SupportContext (DbContextOptions<SupportContext> options) : DbConte
             new { Id = 1, Name = "New" },
             new { Id = 2, Name = "In Progress" },
             new { Id = 3, Name = "Closed" });
+
+        modelBuilder.Entity<User>()
+            .Property(c => c.Id)
+            .ValueGeneratedOnAdd();
     }
     
 }
