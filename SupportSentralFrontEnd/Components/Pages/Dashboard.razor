@@ -1,0 +1,61 @@
+@page "/Dashboard"
+@using Models
+@using SupportSentralFrontEnd.Clients
+@inject TicketClient Client;
+
+
+<PageTitle>Help Desk Tickets</PageTitle>
+
+
+@if (tickets is null)
+{
+    <p><em>Loading....</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+        <th>Title</th> 
+        <th>Description</th>
+        <th>Status</th>
+        <th>Created</th> 
+        <th>Updated</th> 
+        <th>Assigned To </th>
+        </thead>
+        <tbody>
+    
+        @foreach (var ticket in tickets)
+        {
+            <tr>
+                <td> <a href="@GetGameUrl(ticket.Id)">@ticket.Title</a></td>
+                <td>@ticket.Description</td>
+                <td>@ticket.StatusId</td>
+                <td>@ticket.CreatedAt</td>
+                <td>@ticket.UpdatedAt</td>
+                <td>@ticket.AssignedTo</td>
+            </tr>
+
+
+        }
+        </tbody>
+    </table>
+
+}
+
+@code
+{
+    private List<Ticket>? tickets;
+    private string GetGameUrl(int? Id) => $"/editticket/{Id}";
+    
+    protected override async void OnInitialized()
+    {
+        try
+        {
+            tickets = await Client.GetTicketAsync();
+        }
+        catch (Exception e)
+        {
+            throw; // TODO handle exception
+        }
+    }
+}
