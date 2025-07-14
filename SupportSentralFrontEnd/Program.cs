@@ -1,3 +1,4 @@
+using SupportSentralFrontEnd.Clients;
 using SupportSentralFrontEnd.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+var supportSentralUri = builder.Configuration["SupportSentralApiUrl"];
+
+builder.Services.AddHttpClient<TicketClient>(client => client.BaseAddress = new Uri(supportSentralUri)
+);
+builder.Services.AddHttpClient<UserClient>(client => client.BaseAddress = new Uri(supportSentralUri)
+);
+builder.Services.AddHttpClient<StatusClient>(client => client.BaseAddress = new Uri(supportSentralUri)
+);
 
 var app = builder.Build();
 

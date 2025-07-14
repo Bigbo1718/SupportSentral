@@ -1,6 +1,6 @@
 namespace SupportSentralFrontEnd.Models;
 
-public class Tickets
+public class Ticket
 {
     public int Id { get; set; }
     

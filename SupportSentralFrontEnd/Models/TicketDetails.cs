@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SupportSentralFrontEnd.Models;
 
-public class TicketsDetails
+public class TicketDetails
 {
     public int Id { get; set; }
     
@@ -16,7 +16,7 @@ public class TicketsDetails
     
     public DateTime CreatedAt { get; set; }
     
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
     
     public string? UserId { get; set; }
     

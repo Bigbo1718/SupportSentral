@@ -8,6 +8,7 @@ builder.Services.AddRepositories(builder.Configuration);
 var app = builder.Build();
 
 app.MapToUserEndpoint();
+app.MapToStatusEndpoint();
 app.MapToTicketEndpoint();
 await app.MigrateDbAsync();
 

@@ -1,6 +1,140 @@
-@page "/EditTicket"
-<h3>EditTicket</h3>
+@page "/editticket"
+@page "/editticket/{id:guid}/{userId}"
+@using SupportSentralFrontEnd.Clients
+@using SupportSentralFrontEnd.Models
+@inject NavigationManager NavigationManager;
+@inject TicketClient Client;
+@inject UserClient UserClient;
+@inject StatusClient StatusClient;
+@InteractiveServer
+<PageTitle>@title</PageTitle>
+<h3>@title</h3>
+@if (statuses is null || users is null)
+{
+    <p><em>Loading</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm Model="@ticket" FormName="editTicket" OnValidSubmit="HandleSubmit">
+                <DataAnnotationsValidator/>
+                <ValidationSummary/>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title:</label>
+                    <InputText id="title" class="form-control" @bind-Value="ticket.Title"/>
+                    <ValidationMessage For="() => ticket.Title"/>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Issue Description:</label>
+                    <InputTextArea id="description" class="form-control" @bind-Value="ticket.Description"/>
+                    <ValidationMessage For="() => ticket.Description"/>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status:</label>
+                    <InputSelect id="status" class="form-select" @bind-Value="ticket.StatusId">
+                        <option value="">Select a Status</option>
+                        @foreach (var status in statuses)
+                        {
+                            <option value="@status.Id">@status.Name</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="() => ticket.StatusId"/>
+                    
+                </div>
+                <div class="mb-3 form-check">
+                    <InputCheckbox id="selfAssign" class="form-check-input" @bind-Value="ticket.AssignToSelf"/>
+                    <label for="selfAssign" class="form-check-label">Assign To Me</label>
+                </div>
+                <div class="mb-3">
+                    <label for="user" class="form-label">Assign To:</label>
+                    <InputSelect id="user" class="form-select" @bind-Value="ticket.UserId">
+                        <option value=""> Select a User To Assign Ticket To..</option>
+                        @foreach (var user in users)
+                        {
+                            <option value="@user.Id"> @user.Name</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </EditForm>
+
+        </div>   
+    </div>
+ 
+}
 
 @code {
+    [SupplyParameterFromForm]
+    private TicketDetails? ticket { get; set; }
+    [Parameter]
+    public Guid? Id { get; set; }
+    [Parameter]
+    public string? userId { get; set; }
+    private StatusClient _client;
+    private TicketClient _ticketClient;
+    private List<Status>? statuses;
+    private List<User>? users;
+    private string title;
     
+    private void HandleSubmit()
+    {
+
+        if (ticket == null)
+        {
+            Client.AddTicketAsync(ticket);
+        }
+        else
+        {
+            Client.UpdateTicketAsync(ticket, Id);
+        }
+        NavigationManager.NavigateTo("/");
+    }
+
+
+    protected override async void OnParametersSet()
+    {
+        try
+        {
+            if (ticket != null)
+            {
+                return;
+            }
+            if (Id is not null)
+            {
+                ticket = await  _ticketClient.GetTicketDetailsAsync(Id);
+                title = "Edit Ticket";
+            }
+            else
+            {
+                ticket = new()
+                {
+                    Title = "",
+                    Description = "",
+                    CreatedAt = DateTime.UtcNow
+                };
+                title = "Create New Ticket";
+            }
+        }
+        catch (Exception e)
+        {
+            throw; // TODO handle exception
+        }
+    }
+
+    protected override async void OnInitialized()
+    {
+        statuses = await StatusClient.GetStatuses();
+        users = await UserClient.GetAllUserAsync();
+    }
+
+
+    private void AssignedToSelfChanged(string obj)
+    {
+        return;
+    }
+
+
 }
