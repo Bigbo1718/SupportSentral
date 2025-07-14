@@ -18,7 +18,8 @@ public static class DataExtension
         var connectionString = configuration.GetConnectionString("SupportSentral");
 
         services.AddSqlite<SupportContext>(connectionString)
-            .AddScoped<ITicketRepository, EntityFrameworkTicketRepository>();
+            .AddScoped<ITicketRepository, EntityFrameworkTicketRepository>()
+            .AddScoped<IUserRepository, EntityFrameworkUserRepository>();
 
         return services;
     }

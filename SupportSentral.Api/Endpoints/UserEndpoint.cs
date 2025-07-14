@@ -4,6 +4,7 @@ using SupportSentral.Api.Contracts;
 using SupportSentral.Api.Data;
 using SupportSentral.Api.Entities;
 using SupportSentral.Api.Mappings;
+using SupportSentral.Api.Repositories;
 
 namespace SupportSentral.Api.Endpoints;
 
@@ -17,63 +18,33 @@ public static class UserEndpoint
         const string getUserEndpointName = "GetUser";
         
         //Get /users
-        group.MapGet("/", (SupportContext dbContext) =>(
-            dbContext
-                .Users
-                .AsNoTracking()
-                .ToList()) );
+        group.MapGet("/", (IUserRepository repository) =>(
+            repository.GetAllAsync()) );
         
         //GET users/email
-        group.MapGet("/{email}", (string email, SupportContext dbContext) =>
+        group.MapGet("/{email}",async (string email, 
+            IUserRepository repository)  =>
         {
-            var user = dbContext.Users.SingleOrDefault(x => x.Email == email);
+            var user = await repository.GetByEmailIdAsync(email);
             
             return user != null ? 
-                Results.Ok(user.MapToContract()) : Results.NotFound();
+                Results.Ok(user) : Results.NotFound();
             
         }).WithName(getUserEndpointName);
         
-        //Post users
-        group.MapPost("/", (UserContract user, SupportContext dbContext) =>
+        //POST users
+        group.MapPost("/", async (UserContract user, IUserRepository repository) =>
         {
-            if (string.IsNullOrWhiteSpace(user.Email))
-            {
-                return Results.BadRequest("Email is required");
-            };
-
-            var isValidEmail = user.Email.ValidateUsingRegex();
-
-            if (!isValidEmail)
-            {
-                return Results.BadRequest("Please enter a valid email");
-            }
-            User createdUser = new User
-            {
-                Email = user.Email,
-                Name = user.Name,
-            };
-            var createdEntity = dbContext.Users.Add(createdUser);
-            dbContext.SaveChanges();
-            var mappedUser= createdEntity.Entity.MapToContract();
-            return Results.CreatedAtRoute(getUserEndpointName,
-                new { mappedUser.Email}, mappedUser);
-        }); 
-        //Post users
-        group.MapPut("/{id}", (Guid id, UpdateUserContract user, SupportContext dbContext) =>
-        {
-            var existingUser = dbContext.Users.Find(id);
-            if (existingUser == null)
-            {
-                Results.NotFound();
-            }
+            UserContract? createdUser = await repository.CreateUserAsync(user);
             
-            dbContext.Entry(existingUser)
-                .CurrentValues
-                .SetValues(user.MapToEntity(id));
-            dbContext.SaveChanges();
-
+            if(createdUser == null)
+                return Results.BadRequest();
+            
+            return Results.CreatedAtRoute(getUserEndpointName,
+                new { createdUser.Email}, createdUser);
         }); 
-        
+        //PUT users
+        group.MapPut("/{id}", async (Guid id, UpdateUserContract user,IUserRepository repository) => await repository.UpdateUser(id, user)?  Results.NoContent(): Results.BadRequest()); 
         
         
         return group;

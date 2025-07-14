@@ -1,7 +1,7 @@
 using SupportSentral.Api.Contracts;
 using SupportSentral.Api.Entities;
 
-namespace SupportSentral.Api;
+namespace SupportSentral.Api.Mappings;
 
 public static class TicketMapping
 {

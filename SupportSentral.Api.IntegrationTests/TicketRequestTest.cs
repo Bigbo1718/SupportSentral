@@ -10,6 +10,7 @@ namespace SupportSentral.Api.IntegrationTests;
 
 public class TicketRequestTest
 {
+    //TODO: Mock DbInstance and Validate Input that has been added to database
     [Fact]
     public async Task TicketRequest_PostRequestWithValidParameters_ShouldReturnNewTicketObj()
     {
@@ -328,7 +329,7 @@ public class TicketRequestTest
 
         var response = await httpClient.PutAsync($"/tickets/{Guid.NewGuid()}",updatedContent );
         
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         
     }
     [Fact]

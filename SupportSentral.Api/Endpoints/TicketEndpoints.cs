@@ -30,6 +30,14 @@ public static class TicketEndpoints
             
         }).WithName(getTicketEndpointName);
         
+        /*//GET tickets/user/id
+        group.MapGet("/user/{id}", async (Guid id, ITicketRepository repository) =>
+        {
+            List<TicketDetailsContract> ticket = await repository.GetListByUserIdAsync(id);
+            return Results.Ok(ticket);
+
+        }).WithName(getTicketEndpointName);*/
+        
         //Post tickets/
         group.MapPost("/", async (CreateTicketContract ticket, ITicketRepository repository) =>
         {

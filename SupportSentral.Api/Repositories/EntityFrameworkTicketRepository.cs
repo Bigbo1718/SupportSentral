@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SupportSentral.Api.Contracts;
 using SupportSentral.Api.Data;
-using SupportSentral.Api.Entities;
+using SupportSentral.Api.Mappings;
 
 namespace SupportSentral.Api.Repositories;
 
@@ -29,7 +29,8 @@ public class EntityFrameworkTicketRepository : ITicketRepository
 
         return ticket?.ToTicketDetailsContract();
     }
-
+    
+    
     public async Task<TicketDetailsContract?> CreateTicketAsync(CreateTicketContract ticket)
     {
         var isValidTicket = ValidateCreatedTicket(ticket);
