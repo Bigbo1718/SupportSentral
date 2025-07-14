@@ -6,5 +6,14 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bd46497f_002Da4cf_002D4b1e_002Dbeed_002D019b787f2512/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="UserRequest_AddUserToDatabase_ShouldReturnNewUserObj" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::E436F9D9-B51C-4141-B6CD-88890DF7AE01::net9.0::SupportSentral.Api.IntegrationTests.UserRequestTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::E436F9D9-B51C-4141-B6CD-88890DF7AE01::net9.0::SupportSentral.Api.IntegrationTests.TicketRequestTest.TicketRequest_CreateTicketWithValidParameters_ShouldReturnNewTicketObj&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::E436F9D9-B51C-4141-B6CD-88890DF7AE01::net9.0::SupportSentral.Api.IntegrationTests.TicketRequestTest.TicketRequest_CreateTicketWithoutTitle_ShouldReturnErrorMessage404&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::E436F9D9-B51C-4141-B6CD-88890DF7AE01::net9.0::SupportSentral.Api.IntegrationTests.TicketRequestTest.TicketRequest_CreateTicketWithoutDescription_ShouldReturnErrorMessage404&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::E436F9D9-B51C-4141-B6CD-88890DF7AE01::net9.0::SupportSentral.Api.IntegrationTests.TicketRequestTest.TicketRequest_PostRequestWithoutUser_ShouldReturnErrorMessage404&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::E436F9D9-B51C-4141-B6CD-88890DF7AE01::net9.0::SupportSentral.Api.IntegrationTests.TicketRequestTest.TicketRequest_PostRequestWithoutDescription_ShouldReturnErrorMessage404&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::E436F9D9-B51C-4141-B6CD-88890DF7AE01::net9.0::SupportSentral.Api.IntegrationTests.TicketRequestTest.TicketRequest_GetRequestToGetAllTicket_ShouldReturnListOfTickets&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::E436F9D9-B51C-4141-B6CD-88890DF7AE01::net9.0::SupportSentral.Api.IntegrationTests.TicketRequestTest.TicketRequest_GetRequestWithId_ShouldReturnTicketDetails&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::E436F9D9-B51C-4141-B6CD-88890DF7AE01::net9.0::SupportSentral.Api.IntegrationTests.TicketRequestTest.TicketRequest_GetRequestWithInvalidId_ShouldReturnError400&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::E436F9D9-B51C-4141-B6CD-88890DF7AE01::net9.0::SupportSentral.Api.IntegrationTests.TicketRequestTest&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

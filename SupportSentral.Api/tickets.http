@@ -1,6 +1,38 @@
 @SupportSentralTicketApi_HostAddress = http://localhost:5222
 
-GET {{SupportSentralTicketApi_HostAddress}}/ticket
+GET {{SupportSentralTicketApi_HostAddress}}/tickets
 Accept: application/json
 
 ###
+
+GET {{SupportSentralTicketApi_HostAddress}}/tickets/2d980dee-fa87-4aa2-a988-b2a72b27a6d8
+
+###
+
+POST {{SupportSentralTicketApi_HostAddress}}/tickets
+Content-Type: application/json
+
+{
+  "title" : "We Are The Solution",
+  "description": "Allow God To Work",
+  "statusId" : 2,
+  "createdDate" : "2025-07-10T23:49:13Z",
+  "UserId" : "FCCBA9A0-0588-4D1E-BC46-1E380F5CA903"
+}
+
+### 
+PUT {{SupportSentralTicketApi_HostAddress}}/tickets/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "God Made It",
+  "description": "Did YOu Readlly",
+  "statusId": 2,
+  "UpdatedDate": "2025-07-10T23:49:13Z",
+  "UserId" : "Bo Boateng"
+}
+
+###
+
+GET {{SupportSentralTicketApi_HostAddress}}/status

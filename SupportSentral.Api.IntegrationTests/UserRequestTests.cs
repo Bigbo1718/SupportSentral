@@ -51,8 +51,7 @@ public class UserRequestTests
 
         
         var response = await client.PostAsync("/users", content);
-
-        var userResponse = await response.Content.ReadFromJsonAsync<UserContract>();
+        
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
     [Fact]

@@ -7,12 +7,11 @@ var connectionString = builder.Configuration.GetConnectionString("SupportSentral
 
 builder.Services.AddSqlite<SupportContext>(connectionString);
 
-
-
 var app = builder.Build();
 
 
 app.MapToUserEndpoint();
+app.MapToTicketEndpoint();
 await app.MigrateDbAsync();
 
 app.Run();
