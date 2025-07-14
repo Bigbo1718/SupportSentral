@@ -1,8 +1,9 @@
+using SupportSentralFrontEnd.Interfaces;
 using SupportSentralFrontEnd.Models;
 
 namespace SupportSentralFrontEnd.Clients;
 
-public class StatusClient(HttpClient client)
+public class StatusClient(HttpClient client) : IStatusClient
 {
     public async Task<List<Status>?> GetStatuses()
     {

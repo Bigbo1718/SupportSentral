@@ -1,9 +1,10 @@
+using SupportSentralFrontEnd.Interfaces;
 using SupportSentralFrontEnd.Mappers;
 using SupportSentralFrontEnd.Models;
 
 namespace SupportSentralFrontEnd.Clients;
 
-public class TicketClient(HttpClient client)
+public class TicketClient(HttpClient client) : ITicketClient
 {
     private readonly TicketMapper _ticketMapper = new();
 
@@ -29,7 +30,7 @@ public class TicketClient(HttpClient client)
         return await _ticketMapper.MapToTicketsDetails(ticket);
     }
 
-    public async void  UpdateTicketAsync(TicketDetails ticket, Guid? Id)
+    public async Task UpdateTicketAsync(TicketDetails ticket, Guid? Id)
     {
         Ticket? existingTicket = await GetTicketAsync(Id);
         ArgumentNullException.ThrowIfNull(existingTicket);

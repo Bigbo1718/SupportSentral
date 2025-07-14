@@ -1,8 +1,9 @@
+using SupportSentralFrontEnd.Interfaces;
 using SupportSentralFrontEnd.Models;
 
 namespace SupportSentralFrontEnd.Clients;
 
-public class UserClient(HttpClient client)
+public class UserClient(HttpClient client) : IUserClient
 {
     public async Task<User?> GetUserFromEmail(string email)
     {

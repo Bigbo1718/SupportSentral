@@ -1,4 +1,5 @@
 using SupportSentralFrontEnd.Clients;
+using SupportSentralFrontEnd.Interfaces;
 using SupportSentralFrontEnd.Models;
 
 namespace SupportSentralFrontEnd.Mappers;
@@ -7,9 +8,9 @@ public class TicketMapper
     private readonly TicketDetails _ticketsDetails;
     private readonly Ticket _tickets;
     private User[]? users;
-    private UserClient _userClient;
+    public IUserClient _userClient;
     private Status[]? statuses;
-    private StatusClient _statusClient;
+    public IStatusClient _statusClient;
 
 
     public async Task<Ticket?> MapFromTicketDetails(TicketDetails ticketsDetails)
