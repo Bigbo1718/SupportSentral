@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportSentral.Api", "Suppo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportSentral.Api.IntegrationTests", "SupportSentral.Api.IntegrationTests\SupportSentral.Api.IntegrationTests.csproj", "{E436F9D9-B51C-4141-B6CD-88890DF7AE01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportSentralFrontEnd", "SupportSentralFrontEnd\SupportSentralFrontEnd.csproj", "{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{E436F9D9-B51C-4141-B6CD-88890DF7AE01}.Release|x64.Build.0 = Release|Any CPU
 		{E436F9D9-B51C-4141-B6CD-88890DF7AE01}.Release|x86.ActiveCfg = Release|Any CPU
 		{E436F9D9-B51C-4141-B6CD-88890DF7AE01}.Release|x86.Build.0 = Release|Any CPU
+		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Debug|x64.Build.0 = Debug|Any CPU
+		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Debug|x86.Build.0 = Debug|Any CPU
+		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Release|x64.ActiveCfg = Release|Any CPU
+		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Release|x64.Build.0 = Release|Any CPU
+		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Release|x86.ActiveCfg = Release|Any CPU
+		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
