@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using SupportSentral.Api.Entities;
 
 namespace SupportSentral.Api.Data;
@@ -10,7 +11,13 @@ public class SupportContext (DbContextOptions<SupportContext> options) : DbConte
     public DbSet<Ticket> Tickets => Set<Ticket>();
 
     public DbSet<Status> Status => Set<Status>();
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
 
+        optionsBuilder.ConfigureWarnings(warnings => warnings.Log(RelationalEventId.PendingModelChangesWarning));
+
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Status>().HasData(
@@ -19,6 +26,9 @@ public class SupportContext (DbContextOptions<SupportContext> options) : DbConte
             new { Id = 3, Name = "Closed" });
 
         modelBuilder.Entity<User>()
+            .Property(c => c.Id)
+            .ValueGeneratedOnAdd();
+        modelBuilder.Entity<Ticket>()
             .Property(c => c.Id)
             .ValueGeneratedOnAdd();
     }

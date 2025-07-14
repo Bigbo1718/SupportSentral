@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using SupportSentral.Api.Contracts;
 using SupportSentral.Api.Data;
@@ -13,7 +14,7 @@ public static class UserEndpoint
         var group = app.MapGroup("users")
             .WithParameterValidation();
 
-        const string getTicketEndpointName = "GetUser";
+        const string getUserEndpointName = "GetUser";
         
         //Get /users
         group.MapGet("/", (SupportContext dbContext) =>(
@@ -21,26 +22,41 @@ public static class UserEndpoint
                 .Users
                 .AsNoTracking()
                 .ToList()) );
-        //Get /users
-        group.MapGet("/{id}", (Guid id, SupportContext dbContext) =>
+        
+        //GET users/email
+        group.MapGet("/{email}", (string email, SupportContext dbContext) =>
         {
-            var user = dbContext.Users.Find(id);
+            var user = dbContext.Users.SingleOrDefault(x => x.Email == email);
             
             return user != null ? 
                 Results.Ok(user.MapToContract()) : Results.NotFound();
             
-        });
+        }).WithName(getUserEndpointName);
+        
         //Post users
         group.MapPost("/", (UserContract user, SupportContext dbContext) =>
         {
+            if (string.IsNullOrWhiteSpace(user.Email))
+            {
+                return Results.BadRequest("Email is required");
+            };
+
+            var isValidEmail = user.Email.ValidateUsingRegex();
+
+            if (!isValidEmail)
+            {
+                return Results.BadRequest("Please enter a valid email");
+            }
             User createdUser = new User
             {
                 Email = user.Email,
                 Name = user.Name,
             };
-            dbContext.Users.Add(createdUser);
+            var createdEntity = dbContext.Users.Add(createdUser);
             dbContext.SaveChanges();
-
+            var mappedUser= createdEntity.Entity.MapToContract();
+            return Results.CreatedAtRoute(getUserEndpointName,
+                new { mappedUser.Email}, mappedUser);
         }); 
         //Post users
         group.MapPut("/{id}", (Guid id, UpdateUserContract user, SupportContext dbContext) =>
@@ -58,6 +74,17 @@ public static class UserEndpoint
 
         }); 
         
+        
+        
         return group;
+    }
+    
+    public static bool ValidateUsingRegex(this string emailAddress)
+    {
+        var pattern = @"^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
+            
+        var regex = new Regex(pattern);
+
+        return regex.IsMatch(emailAddress);
     }
 }

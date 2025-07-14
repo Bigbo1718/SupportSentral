@@ -1,8 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace SupportSentral.Api.Entities;
 
 public class Ticket
-{
-    public int Id { get; set; }
+{ 
+    [Key]
+    [Required]
+    public Guid Id { get; set; }
 
     public required string Title { get; set; }
     
