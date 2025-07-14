@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SupportSentral.Api.Repositories;
 
 namespace SupportSentral.Api.Data;
 
@@ -10,5 +11,15 @@ public static class DataExtension
         var dbContext = scope.ServiceProvider.GetRequiredService<SupportContext>();
         await dbContext.Database.MigrateAsync();
         
+    }
+    public static IServiceCollection AddRepositories(this IServiceCollection services, IConfiguration configuration)
+    {
+  
+        var connectionString = configuration.GetConnectionString("SupportSentral");
+
+        services.AddSqlite<SupportContext>(connectionString)
+            .AddScoped<ITicketRepository, EntityFrameworkTicketRepository>();
+
+        return services;
     }
 }

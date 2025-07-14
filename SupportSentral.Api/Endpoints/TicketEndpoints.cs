@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SupportSentral.Api.Contracts;
 using SupportSentral.Api.Data;
 using SupportSentral.Api.Mappings;
+using SupportSentral.Api.Repositories;
 
 namespace SupportSentral.Api.Endpoints;
 
@@ -15,62 +16,34 @@ public static class TicketEndpoints
         const string getTicketEndpointName = "GetTicket";
         
         //Get /tickets
-        group.MapGet("/", (SupportContext dbContext) =>(
-            dbContext
-                .Tickets
-                .AsNoTracking()
-                .ToList()) );
+        group.MapGet("/", async (ITicketRepository repository) => (
+            await repository.GetAllAsync())
+        );
         
         //GET tickets/id
-        group.MapGet("/{id}", (Guid id, SupportContext dbContext) =>
+        group.MapGet("/{id}", async (Guid id, ITicketRepository repository) =>
         {
-            var ticket = dbContext.Tickets.Find(id);
+            TicketDetailsContract? ticket = await repository.GetByIdAsync(id);
             
             return ticket != null ? 
-                Results.Ok(ticket.ToTicketDetailsContract()) : Results.NotFound();
+                Results.Ok(ticket) : Results.NotFound();
             
         }).WithName(getTicketEndpointName);
         
         //Post tickets/
-        group.MapPost("/", (CreateTicketContract ticket, SupportContext dbContext) =>
+        group.MapPost("/", async (CreateTicketContract ticket, ITicketRepository repository) =>
         {
-            if (ticket.UserId.Equals(Guid.Empty))
-            {
-                return Results.BadRequest("a valid user id is required");
-            };
-
-            if (ticket.StatusId.Equals(0))
-            {
-                return Results.BadRequest("a valid status id is required");
-            }
+            TicketDetailsContract? ticketDetails = await repository.CreateTicketAsync(ticket);
             
-            var createdTicketEntity = dbContext.Tickets.Add(ticket.ToEntity());
-            dbContext.SaveChanges();
-            var ticketDetails = createdTicketEntity.Entity.ToTicketDetailsContract();
-            return Results.CreatedAtRoute(getTicketEndpointName,
+            if (ticketDetails != null)
+              return Results.CreatedAtRoute(getTicketEndpointName,
                 new { ticketDetails.Id}, ticketDetails);
+            
+            return Results.BadRequest();
         }).WithParameterValidation();; 
         
         //Put tickets
-        group.MapPut("/{id}", (Guid id, UpdateTicketDetailsContract ticket, SupportContext dbContext) =>
-        {
-            var existingTicket = dbContext.Tickets.Find(id);
-            if (existingTicket == null)
-            {
-               return Results.NotFound();
-            }
-            if (ticket.StatusId.Equals(0))
-            {
-                return Results.BadRequest("a valid status id is required");
-            }
-            
-            dbContext.Entry(existingTicket)
-                .CurrentValues
-                .SetValues(ticket.ToEntity(id));
-            dbContext.SaveChanges();
-
-            return Results.NoContent();
-        }); 
+        group.MapPut("/{id}", async (Guid id, UpdateTicketDetailsContract ticket, ITicketRepository repository) => await repository.UpdateTicketDetailsContract(ticket, id) ? Results.NoContent() : Results.BadRequest()); 
         
         
         

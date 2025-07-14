@@ -3,12 +3,9 @@ using SupportSentral.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("SupportSentral");
-
-builder.Services.AddSqlite<SupportContext>(connectionString);
+builder.Services.AddRepositories(builder.Configuration);
 
 var app = builder.Build();
-
 
 app.MapToUserEndpoint();
 app.MapToTicketEndpoint();

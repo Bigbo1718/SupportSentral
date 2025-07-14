@@ -164,7 +164,7 @@ public class TicketRequestTest
 
         response.EnsureSuccessStatusCode();
         
-        var matchResponse = await response.Content.ReadFromJsonAsync<List<TicketDetailsContract>>();
+        var matchResponse = await response.Content.ReadFromJsonAsync<List<TicketContract>>();
         matchResponse.Should().NotBeNull();
         
     }
