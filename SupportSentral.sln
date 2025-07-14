@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportSentral.Api.Integrat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportSentralFrontEnd", "SupportSentralFrontEnd\SupportSentralFrontEnd.csproj", "{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportSentralFrontendTest", "SupportSentralFrontendTest\SupportSentralFrontendTest.csproj", "{096CE8FD-6726-41A2-802F-A73522222869}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Release|x64.Build.0 = Release|Any CPU
 		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Release|x86.ActiveCfg = Release|Any CPU
 		{E1D25D3D-0AC0-4BE8-B7D0-D5C1B4BA7AB4}.Release|x86.Build.0 = Release|Any CPU
+		{096CE8FD-6726-41A2-802F-A73522222869}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{096CE8FD-6726-41A2-802F-A73522222869}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{096CE8FD-6726-41A2-802F-A73522222869}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{096CE8FD-6726-41A2-802F-A73522222869}.Debug|x64.Build.0 = Debug|Any CPU
+		{096CE8FD-6726-41A2-802F-A73522222869}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{096CE8FD-6726-41A2-802F-A73522222869}.Debug|x86.Build.0 = Debug|Any CPU
+		{096CE8FD-6726-41A2-802F-A73522222869}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{096CE8FD-6726-41A2-802F-A73522222869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{096CE8FD-6726-41A2-802F-A73522222869}.Release|x64.ActiveCfg = Release|Any CPU
+		{096CE8FD-6726-41A2-802F-A73522222869}.Release|x64.Build.0 = Release|Any CPU
+		{096CE8FD-6726-41A2-802F-A73522222869}.Release|x86.ActiveCfg = Release|Any CPU
+		{096CE8FD-6726-41A2-802F-A73522222869}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
