@@ -10,7 +10,7 @@ public class TicketClient(HttpClient client) : ITicketClient
 
     public async Task<List<Ticket>?> GetTicketAsync()
     {
-        return await client.GetFromJsonAsync<List<Ticket>>("ticket");
+        return await client.GetFromJsonAsync<List<Ticket>>("tickets");
     }
     
     public void AddTicketAsync(TicketDetails ticket)
@@ -24,7 +24,7 @@ public class TicketClient(HttpClient client) : ITicketClient
 
     public async Task<TicketDetails> GetTicketDetailsAsync(Guid? ticketId)
     {
-        Ticket? ticket= await client.GetFromJsonAsync<Ticket?>($"/ticket/{ticketId}");
+        Ticket? ticket= await client.GetFromJsonAsync<Ticket?>($"/tickets/{ticketId}");
         
         ArgumentNullException.ThrowIfNull(ticket);
         return await _ticketMapper.MapToTicketsDetails(ticket);
@@ -39,7 +39,7 @@ public class TicketClient(HttpClient client) : ITicketClient
         existingTicket.Description = ticket.Description;
         existingTicket.UpdatedAt = DateTime.Now;
         ArgumentNullException.ThrowIfNull(ticket.StatusId);
-        existingTicket.StatusId = int.Parse(ticket.StatusId);
+        existingTicket.StatusId = ticket.StatusId;
     }
 
     private async Task<Ticket?> GetTicketAsync(Guid? Id)

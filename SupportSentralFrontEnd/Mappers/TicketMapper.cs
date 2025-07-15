@@ -16,10 +16,10 @@ public class TicketMapper
     public async Task<Ticket?> MapFromTicketDetails(TicketDetails ticketsDetails)
     {
 
-        var statusId = await _statusClient.GetStatusFromId(ticketsDetails.Id);
+        var statusId = await _statusClient.GetStatusFromId(ticketsDetails.StatusId);
         if (ticketsDetails.UserId != null)
         {
-            var user = await _userClient.GetUserFromEmail(ticketsDetails.UserId);
+            var user = await _userClient.GetUserFromId(ticketsDetails.UserId);
         
         
             if (ticketsDetails is { StatusId: not null, UserId: not null })
@@ -28,10 +28,11 @@ public class TicketMapper
                 {
                     Title = ticketsDetails.Title,
                     Description = ticketsDetails.Description,
-                    StatusId = int.Parse(ticketsDetails.StatusId),
+                    StatusId = ticketsDetails.StatusId,
                     CreatedAt = DateTime.UtcNow,
-                    Id = new Random().Next(),
+                    Id = ticketsDetails.Id,
                     AssignedTo = user!.Name,
+                    UserId = user.Id,
                 };
             }
         }
@@ -52,9 +53,10 @@ public class TicketMapper
             Description = ticket.Description,
             CreatedAt = ticket.CreatedAt,
             AssignToSelf = true, //Check if user is logged in user using UserClass, (Get CurrentUser)
-            UserId = ticket.AssignedTo,
+            UserId = ticket.UserId,
+            Id = ticket.Id,
             UpdatedAt = ticket.UpdatedAt,
-            StatusId = ticket.StatusId.ToString(),
+            StatusId = ticket.StatusId
 
         };
     }

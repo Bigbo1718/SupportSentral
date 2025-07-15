@@ -9,7 +9,7 @@ public class StatusClient(HttpClient client) : IStatusClient
     {
         return await client.GetFromJsonAsync<List<Status>>("status");
     }
-    public async Task<Status?> GetStatusFromId(int id)
+    public async Task<Status?> GetStatusFromId(int? id)
     {
         var statusResponse =  await client.GetFromJsonAsync<Status>($"status/{id}");
         return statusResponse;

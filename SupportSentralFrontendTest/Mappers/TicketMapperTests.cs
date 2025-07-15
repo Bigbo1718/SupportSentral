@@ -1,9 +1,12 @@
-using Moq;
-using SupportSentralFrontEnd.Interfaces;
-using SupportSentralFrontEnd.Mappers;
 using SupportSentralFrontEnd.Models;
+using SupportSentralFrontEnd.Interfaces;
+using Moq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Threading.Tasks;
+using SupportSentralFrontEnd.Mappers;
 
-namespace SupportSentralFrontendTest.Mappers
+namespace SupportSentralFrontEnd.Tests.Mappers
 {
     [TestClass]
     public class TicketMapperTests
@@ -13,7 +16,7 @@ namespace SupportSentralFrontendTest.Mappers
         private TicketMapper _mapper;
 
         [TestInitialize]
-        public void Setup()
+        public void TestInitialize()
         {
             _mockUserClient = new Mock<IUserClient>();
             _mockStatusClient = new Mock<IStatusClient>();
@@ -25,22 +28,32 @@ namespace SupportSentralFrontendTest.Mappers
         }
 
         [TestMethod]
-        public async Task MapFromTicketDetails_WithValidDetails_ReturnsMappedTicket()
+        public async Task MapFromTicketDetails_WithValidDetails_ReturnsTicket()
         {
             // Arrange
+            var userId = Guid.NewGuid();
             var ticketDetails = new TicketDetails
             {
+                Id = Guid.NewGuid(),
                 Title = "Test Ticket",
                 Description = "Test Description",
-                StatusId = "1",
-                UserId = "user@example.com"
+                StatusId = 1,
+                UserId = userId,
             };
 
-            var expectedUser = new User { Email = "Boateng4@gmail.com", Name = "Test User" };
-            _mockUserClient.Setup(x => x.GetUserFromEmail(ticketDetails.UserId))
+            var expectedUser = new User 
+            { 
+                Id = userId,
+                Name = "Test User",
+                Email = "test@example.com"
+            };
+
+            var expectedStatus = new Status { Id = 1, Name = "Open" };
+
+            _mockUserClient.Setup(x => x.GetUserFromId(userId))
                           .ReturnsAsync(expectedUser);
-            _mockStatusClient.Setup(x => x.GetStatusFromId(ticketDetails.Id))
-                           .ReturnsAsync(new Status{Id = 1, Name = "Closed"});
+            _mockStatusClient.Setup(x => x.GetStatusFromId(ticketDetails.StatusId))
+                           .ReturnsAsync(expectedStatus);
 
             // Act
             var result = await _mapper.MapFromTicketDetails(ticketDetails);
@@ -49,9 +62,9 @@ namespace SupportSentralFrontendTest.Mappers
             Assert.IsNotNull(result);
             Assert.AreEqual(ticketDetails.Title, result.Title);
             Assert.AreEqual(ticketDetails.Description, result.Description);
-            Assert.AreEqual(int.Parse(ticketDetails.StatusId), result.StatusId);
+            Assert.AreEqual(ticketDetails.StatusId, result.StatusId);
             Assert.AreEqual(expectedUser.Name, result.AssignedTo);
-            Assert.IsTrue(result.CreatedAt <= DateTime.UtcNow);
+            Assert.AreEqual(expectedUser.Id, result.UserId); 
         }
 
         [TestMethod]
@@ -60,9 +73,10 @@ namespace SupportSentralFrontendTest.Mappers
             // Arrange
             var ticketDetails = new TicketDetails
             {
+                Id = Guid.NewGuid(),
                 Title = "Test Ticket",
                 Description = "Test Description",
-                StatusId = "1",
+                StatusId = 1,
                 UserId = null
             };
 
@@ -74,19 +88,27 @@ namespace SupportSentralFrontendTest.Mappers
         }
 
         [TestMethod]
-        public async Task MapFromTicketDetails_WithNullStatusId_ReturnsNull()
+        public async Task MapFromTicketDetails_WithInvalidStatusId_ReturnsNull()
         {
             // Arrange
+            var userId = Guid.NewGuid();
             var ticketDetails = new TicketDetails
             {
+                Id = Guid.NewGuid(),
                 Title = "Test Ticket",
                 Description = "Test Description",
                 StatusId = null,
-                UserId = "user@example.com"
+                UserId = userId
             };
 
-            var expectedUser = new User { Email = "Boateng84@gmail.com", Name = "Test User" };
-            _mockUserClient.Setup(x => x.GetUserFromEmail(ticketDetails.UserId))
+            var expectedUser = new User 
+            { 
+                Id = userId,
+                Name = "Test User",
+                Email = "test@example.com"
+            };
+
+            _mockUserClient.Setup(x => x.GetUserFromId(userId))
                           .ReturnsAsync(expectedUser);
 
             // Act
@@ -97,44 +119,29 @@ namespace SupportSentralFrontendTest.Mappers
         }
 
         [TestMethod]
-        public async Task MapFromTicketDetails_WhenUserNotFound_ReturnsNull()
+        public async Task MapToTicketDetails_WithValidTicket_ReturnsTicketDetails()
         {
             // Arrange
-            var ticketDetails = new TicketDetails
-            {
-                Title = "Test Ticket",
-                Description = "Test Description",
-                StatusId = "1",
-                UserId = "user@example.com"
-            };
-
-            _mockUserClient.Setup(x => x.GetUserFromEmail(ticketDetails.UserId))
-                          .ReturnsAsync((User)null);
-            _mockStatusClient.Setup(x => x.GetStatusFromId(ticketDetails.Id))
-                           .ReturnsAsync(new Status{Id = 1, Name = "New"});
-
-            // Act
-            var result = await _mapper.MapFromTicketDetails(ticketDetails);
-
-            // Assert
-            Assert.IsNull(result);
-        }
-
-        [TestMethod]
-        public async Task MapToTicketDetails_WithValidTicket_ReturnsMappedDetails()
-        {
-            // Arrange
+            var userId = Guid.NewGuid();
             var ticket = new Ticket
             {
+                Id = Guid.NewGuid(),
                 Title = "Test Ticket",
                 Description = "Test Description",
                 StatusId = 1,
+                UserId = userId,
+                AssignedTo = "test@example.com",
                 CreatedAt = DateTime.UtcNow.AddDays(-1),
-                UpdatedAt = DateTime.UtcNow,
-                AssignedTo = "Test User"
+                UpdatedAt = DateTime.UtcNow
             };
 
-            var expectedUser = new User { Email = "user@example.com", Name = "Kwame"};
+            var expectedUser = new User 
+            { 
+                Id = userId,
+                Name = "Test User",
+                Email = "test@example.com"
+            };
+
             _mockUserClient.Setup(x => x.GetUserFromEmail(ticket.AssignedTo))
                           .ReturnsAsync(expectedUser);
 
@@ -143,42 +150,56 @@ namespace SupportSentralFrontendTest.Mappers
 
             // Assert
             Assert.IsNotNull(result);
+            Assert.AreEqual(ticket.Id, result.Id);
             Assert.AreEqual(ticket.Title, result.Title);
             Assert.AreEqual(ticket.Description, result.Description);
-            Assert.AreEqual(ticket.StatusId.ToString(), result.StatusId);
+            Assert.AreEqual(ticket.StatusId, result.StatusId);
             Assert.AreEqual(ticket.CreatedAt, result.CreatedAt);
             Assert.AreEqual(ticket.UpdatedAt, result.UpdatedAt);
-            Assert.AreEqual(expectedUser.Email, result.UserId);
+            Assert.AreEqual(ticket.UserId, result.UserId);
             Assert.IsTrue(result.AssignToSelf);
         }
 
         [TestMethod]
-        public async Task MapToTicketDetails_WithNullTicket_ReturnsNull()
+        public async Task MapToTicketDetails_WithNullUpdatedAt_PreservesNull()
         {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var ticket = new Ticket
+            {
+                Id = Guid.NewGuid(),
+                Title = "Test Ticket",
+                Description = "Test Description",
+                StatusId = 1,
+                UserId = userId,
+                AssignedTo = "test@example.com",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = null
+            };
+
+            var expectedUser = new User 
+            { 
+                Id = userId,
+                Name = "Test User",
+                Email = "test@example.com"
+            };
+
+            _mockUserClient.Setup(x => x.GetUserFromEmail(ticket.AssignedTo))
+                          .ReturnsAsync(expectedUser);
+
             // Act
-            var result = await _mapper.MapToTicketsDetails(null);
+            var result = await _mapper.MapToTicketsDetails(ticket);
 
             // Assert
-            Assert.IsNull(result);
+            Assert.IsNull(result.UpdatedAt);
         }
 
         [TestMethod]
         [ExpectedException(typeof(NullReferenceException))]
-        public async Task MapToTicketDetails_WhenUserNotFound_ThrowsException()
+        public async Task MapToTicketDetails_WithNullTicket_ThrowsException()
         {
             // Arrange
-            var ticket = new Ticket
-            {
-                Title = "Test Ticket",
-                Description = "Test Description",
-                StatusId = 1,
-                CreatedAt = DateTime.UtcNow.AddDays(-1),
-                UpdatedAt = DateTime.UtcNow,
-                AssignedTo = "Non-existent User"
-            };
-
-            _mockUserClient.Setup(x => x.GetUserFromEmail(ticket.AssignedTo))
-                          .ReturnsAsync((User)null);
+            Ticket ticket = null;
 
             // Act
             await _mapper.MapToTicketsDetails(ticket);

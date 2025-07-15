@@ -27,12 +27,12 @@ else
         @foreach (var ticket in tickets)
         {
             <tr>
-                <td> <a href="@GetGameUrl(ticket.Id)">@ticket.Title</a></td>
+                <td> <a href="@GetTicketUrl(ticket.Id)">@ticket.Title</a></td>
                 <td>@ticket.Description</td>
                 <td>@ticket.StatusId</td>
                 <td>@ticket.CreatedAt</td>
                 <td>@ticket.UpdatedAt</td>
-                <td>@ticket.AssignedTo</td>
+                <td>@ticket.UserId</td>
             </tr>
 
 
@@ -45,7 +45,7 @@ else
 @code
 {
     private List<Ticket>? tickets;
-    private string GetGameUrl(int? Id) => $"/editticket/{Id}";
+    private string GetTicketUrl(Guid? Id) => $"/editticket/{Id}";
     
     protected override async void OnInitialized()
     {

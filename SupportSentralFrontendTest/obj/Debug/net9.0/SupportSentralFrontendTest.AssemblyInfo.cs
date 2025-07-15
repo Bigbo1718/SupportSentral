@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SupportSentralFrontendTest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0eb3fb8cd226f653a4b9b540b675fdea163ecf6b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+62a7a957d9a59cebc105ba91af023fd9bba3af46")]
 [assembly: System.Reflection.AssemblyProductAttribute("SupportSentralFrontendTest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SupportSentralFrontendTest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

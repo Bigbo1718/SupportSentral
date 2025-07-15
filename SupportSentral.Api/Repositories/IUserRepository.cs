@@ -6,6 +6,7 @@ public interface IUserRepository
 {
     public Task<List<UserContract>> GetAllAsync();
     public Task<UserContract?> GetByEmailIdAsync(string email);
+    public Task<UserContract?> GetByIdAsync(Guid Id);
     public Task<UserContract?> CreateUserAsync(UserContract user);
     public Task<bool> UpdateUser(Guid id, UpdateUserContract user);
 }

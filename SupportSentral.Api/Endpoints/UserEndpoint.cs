@@ -22,6 +22,17 @@ public static class UserEndpoint
             repository.GetAllAsync()) );
         
         //GET users/email
+        group.MapGet("/id/{id}",async (Guid Id, 
+            IUserRepository repository)  =>
+        {
+            var user = await repository.GetByIdAsync(Id);
+            
+            return user != null ? 
+                Results.Ok(user) : Results.NotFound();
+            
+        }).WithName(getUserEndpointName);
+        
+        //GET users/email
         group.MapGet("/{email}",async (string email, 
             IUserRepository repository)  =>
         {

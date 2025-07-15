@@ -37,6 +37,18 @@ public class EntityFrameworkUserRepository : IUserRepository
         return null;
     }
 
+    public async Task<UserContract?> GetByIdAsync(Guid Id)
+    {
+        var user = _dbContext.Users
+            .SingleOrDefault(x => x.Id == Id);
+
+        if (user != null)
+        {
+            return await Task.FromResult(user.MapToContract());
+        }
+        return null;
+    }
+
     public async Task<UserContract?> CreateUserAsync(UserContract user)
     {
         if (ValidateUserValues(user.Email)) return null;
